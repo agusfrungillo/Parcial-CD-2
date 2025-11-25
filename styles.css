@@ -568,6 +568,11 @@ ul.nav-links a:hover {
   align-items: center;
   transition: 0.3s;
 }
+.ticket-option div { 
+  text-align: left; 
+  margin-left: 15px; 
+  margin-right: auto; 
+}
 
 .ticket-option:hover,
 .ticket-option.selected {
@@ -963,6 +968,11 @@ footer {
     flex-direction: column;
     text-align: center;
     gap: 10px;
+  }
+
+  .ticket-option div {
+    text-align: center; 
+    margin: 0; 
   }
 
   .nav-checkout .logo img {
