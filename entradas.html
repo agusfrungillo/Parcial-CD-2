@@ -61,9 +61,21 @@
         <div id="step2" class="form-section form-card">
           <h5 class="mb-4 pb-2 border-bottom border-secondary text-white">Tus Datos</h5>
           <div class="row g-3">
-            <div class="col-12 col-md-6"><label class="form-label">Nombre</label><input type="text" class="form-control form-control-dark"></div>
-            <div class="col-12 col-md-6"><label class="form-label">Apellido</label><input type="text" class="form-control form-control-dark"></div>
-            <div class="col-12"><label class="form-label">Email</label><input type="email" class="form-control form-control-dark"></div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-control form-control-dark" id="nombre" oninput="onlyLetters(this)">
+              <div class="error-msg">Este campo es obligatorio</div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Apellido</label>
+              <input type="text" class="form-control form-control-dark" id="apellido" oninput="onlyLetters(this)">
+              <div class="error-msg">Este campo es obligatorio</div>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control form-control-dark" id="email">
+              <div class="error-msg">Ingresá un email válido (@)</div>
+            </div>
           </div>
 
           <div class="summary-card mt-4 mb-4 d-lg-none">
@@ -78,11 +90,27 @@
 
         <div id="step3" class="form-section form-card">
           <h5 class="mb-4 pb-2 border-bottom border-secondary text-white">Pago Seguro</h5>
-          <div class="mb-3"><label class="form-label">Tarjeta</label><input type="text" class="form-control form-control-dark" placeholder="0000 0000 0000 0000"></div>
+          <div class="mb-3">
+            <label class="form-label">Tarjeta</label>
+            <input type="text" class="form-control form-control-dark" id="tarjeta" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCard(this)">
+            <div class="error-msg">Número de tarjeta inválido</div>
+          </div>
           <div class="row g-3">
-            <div class="col-12 col-md-6"><label class="form-label">Titular</label><input type="text" class="form-control form-control-dark"></div>
-            <div class="col-12 col-md-3"><label class="form-label">Venc.</label><input type="text" class="form-control form-control-dark" placeholder="MM/AA"></div>
-            <div class="col-12 col-md-3"><label class="form-label">CVV</label><input type="text" class="form-control form-control-dark" placeholder="123"></div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Titular</label>
+              <input type="text" class="form-control form-control-dark" id="titular" oninput="onlyLetters(this)">
+              <div class="error-msg">Campo obligatorio</div>
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Venc.</label>
+              <input type="text" class="form-control form-control-dark" id="venc" placeholder="MM/AA" maxlength="5" oninput="formatDate(this)">
+              <div class="error-msg">Incompleto</div>
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">CVV</label>
+              <input type="text" class="form-control form-control-dark" id="cvv" placeholder="123" maxlength="3" oninput="onlyNumbers(this)">
+              <div class="error-msg">3 dígitos</div>
+            </div>
           </div>
           
           <div class="summary-card mt-4 mb-4 d-lg-none">
@@ -128,27 +156,137 @@
 
   <script>
     let price=50000, name="Entrada General";
+
+    // --- VALIDACIONES ---
+    function showError(input, msg) {
+      const errorDiv = input.nextElementSibling;
+      if (errorDiv && errorDiv.classList.contains('error-msg')) {
+        errorDiv.innerText = msg;
+        errorDiv.classList.add('visible');
+      }
+      input.classList.add('error');
+    }
+
+    function clearError(input) {
+      const errorDiv = input.nextElementSibling;
+      if (errorDiv) errorDiv.classList.remove('visible');
+      input.classList.remove('error');
+    }
+
+    // Solo numeros
+    function onlyNumbers(input) {
+      input.value = input.value.replace(/[^0-9]/g, '');
+      clearError(input);
+    }
+
+    // Solo letras
+    function onlyLetters(input) {
+      input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
+      clearError(input);
+    }
+
+    // Formato Tarjeta (espacios cada 4)
+    function formatCard(input) {
+      let val = input.value.replace(/\D/g, '');
+      val = val.replace(/(\d{4})/g, '$1 ').trim();
+      input.value = val;
+      clearError(input);
+    }
+
+    // Formato Fecha MM/AA
+    function formatDate(input) {
+      let val = input.value.replace(/\D/g, '');
+      if (val.length >= 2) {
+        val = val.substring(0, 2) + '/' + val.substring(2, 4);
+      }
+      input.value = val;
+      clearError(input);
+    }
+
+    // VALIDACION PRINCIPAL DEL PASO
+    function validateStep(stepId) {
+      let isValid = true;
+      const inputs = document.getElementById(stepId).querySelectorAll('input');
+      
+      inputs.forEach(input => {
+        if (input.type === 'radio') return; // Ignorar radios
+
+        // Chequeo vacio
+        if (input.value.trim() === '') {
+          showError(input, 'Este campo es obligatorio');
+          isValid = false;
+        } else {
+          // Chequeos especificos
+          if (input.id === 'email' && !input.value.includes('@')) {
+            showError(input, 'Por favor ingresar un correo valido');
+            isValid = false;
+          }
+          else if (input.id === 'tarjeta' && input.value.length < 19) {
+            showError(input, 'Incompleto');
+            isValid = false;
+          }
+          else if (input.id === 'cvv' && input.value.length < 3) {
+            showError(input, 'Revisar informacion brindada');
+            isValid = false;
+          }
+          else if (input.id === 'venc' && input.value.length < 5) {
+            showError(input, 'Formato MM/AA');
+            isValid = false;
+          } else {
+            clearError(input);
+          }
+        }
+      });
+      return isValid;
+    }
+
+    // --- LOGICA DE PASOS ---
     function selectTicket(p, n) { 
       price = p; name = n; 
       document.querySelectorAll('.ticket-option').forEach(e => e.classList.remove('selected'));
       event.currentTarget.classList.add('selected'); event.currentTarget.querySelector('input').checked = true;
       updateTotal();
     }
+
     function updateTotal() {
       let qty = document.getElementById('cantidad').value;
       document.querySelectorAll('.summ-name').forEach(el => el.innerText = name);
       document.querySelectorAll('.summ-qty').forEach(el => el.innerText = qty);
       document.querySelectorAll('.summ-total').forEach(el => el.innerText = "$" + (price * qty).toLocaleString('es-AR'));
     }
-    function goStep(n) {
+
+    function goStep(targetStep) {
+      // Identificar paso actual para validar antes de avanzar
+      let currentStepNum = targetStep - 1;
+      let currentStepId = 'step' + currentStepNum;
+
+      // Si vamos para adelante (target > current), validamos
+      // Nota: Si targetStep es 4 (final), validamos el 3.
+      if (targetStep > 1 && targetStep <= 4) {
+         // Si voy del 1 al 2, no hay inputs que validar (solo radio y select que siempre tienen valor)
+         if (currentStepNum > 1) { 
+            if (!validateStep(currentStepId)) return; // Bloquear si falla
+         }
+      }
+
+      // Cambio de vista
       document.querySelectorAll('.form-section').forEach(e => e.classList.remove('active'));
-      document.getElementById('step'+n).classList.add('active');
+      document.getElementById('step'+targetStep).classList.add('active');
+      
+      // Indicadores
       document.querySelectorAll('.step').forEach(e => e.classList.remove('active'));
-      if(n<=3) document.getElementById('s'+n).classList.add('active');
-      if(n==2) document.getElementById('s1').classList.add('completed');
-      if(n==3) { document.getElementById('s1').classList.add('completed'); document.getElementById('s2').classList.add('completed'); }
+      if(targetStep<=3) document.getElementById('s'+targetStep).classList.add('active');
+      
+      if(targetStep==2) document.getElementById('s1').classList.add('completed');
+      if(targetStep==3) { document.getElementById('s1').classList.add('completed'); document.getElementById('s2').classList.add('completed'); }
     }
-    function finish() { goStep(4); document.querySelector('.step-indicator').style.display='none'; document.getElementById('step-title').innerText = "Confirmación"; }
+
+    function finish() { 
+      if (!validateStep('step3')) return;
+      goStep(4); 
+      document.querySelector('.step-indicator').style.display='none'; 
+      document.getElementById('step-title').innerText = "Confirmación"; 
+    }
   </script>
 </body>
 </html>
