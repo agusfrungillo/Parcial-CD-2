@@ -2,18 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Finalizar Compra</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
-  <style>
-    /* Ajustes específicos para el formulario compacto */
-    .form-card.compact { padding: 25px !important; }
-    .compact h5 { font-size: 1rem; margin-bottom: 15px !important; }
-    .compact label { font-size: 0.75rem; margin-bottom: 2px; }
-    .compact .form-control, .compact .form-select { font-size: 0.9rem; padding: 8px 12px; }
-  </style>
+  <style>.form-card.compact { padding: 25px !important; } .compact h5 { font-size: 1rem; margin-bottom: 15px !important; } .compact label { font-size: 0.75rem; margin-bottom: 2px; } .compact .form-control, .compact .form-select { font-size: 0.9rem; padding: 8px 12px; }</style>
 </head>
 <body class="checkout-mode">
 
@@ -37,96 +30,78 @@
 
         <div id="step1" class="form-section active form-card compact">
           <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary">
-             <div>
-               <p class="text-warning fw-bold m-0 text-uppercase summ-title">Producto</p>
-               <span class="badge bg-secondary" style="font-size: 0.65rem;">Stock Disponible</span>
-             </div>
-             <div class="d-flex align-items-center">
-               <label class="text-white small me-2">Cant:</label>
-               <select class="form-control form-control-dark py-1 px-2 text-center" style="width: 60px;" id="cantidad" onchange="updateTotal()">
-                 <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-               </select>
-             </div>
+             <div><p class="text-warning fw-bold m-0 text-uppercase summ-title">Producto</p><span class="badge bg-secondary" style="font-size: 0.65rem;">Stock Disponible</span></div>
+             <div class="d-flex align-items-center"><label class="text-white small me-2">Cant:</label><select class="form-control form-control-dark py-1 px-2 text-center" style="width: 60px;" id="cantidad" onchange="updateTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></div>
           </div>
-
           <h5 class="text-white">Dirección de Entrega</h5>
-          <div class="row g-3">
+          <div class="row g-2">
             <div class="col-12 col-md-6">
               <label class="form-label">Nombre</label>
-              <input type="text" class="form-control form-control-dark" id="nombre" oninput="onlyLetters(this)">
-              <div class="error-msg">Este campo es obligatorio</div>
+              <input type="text" class="form-control form-control-dark" oninput="onlyLetters(this)">
+              <div class="error-msg">Requerido</div>
             </div>
             <div class="col-12 col-md-6">
               <label class="form-label">Apellido</label>
-              <input type="text" class="form-control form-control-dark" id="apellido" oninput="onlyLetters(this)">
-              <div class="error-msg">Este campo es obligatorio</div>
+              <input type="text" class="form-control form-control-dark" oninput="onlyLetters(this)">
+              <div class="error-msg">Requerido</div>
             </div>
             <div class="col-12">
               <label class="form-label">Dirección</label>
-              <input type="text" class="form-control form-control-dark" placeholder="Calle y altura" id="direccion">
-              <div class="error-msg">Ingresá una dirección</div>
+              <input type="text" class="form-control form-control-dark" placeholder="Calle y altura">
+              <div class="error-msg">Ingresa una dirección</div>
             </div>
             <div class="col-12 col-md-4">
               <label class="form-label">CP</label>
               <input type="text" class="form-control form-control-dark" placeholder="0000" id="cp" maxlength="4" oninput="onlyNumbers(this)">
-              <div class="error-msg">Código Postal requerido</div>
+              <div class="error-msg">Requerido</div>
             </div>
             <div class="col-12 col-md-8">
               <label class="form-label">Ciudad</label>
-              <input type="text" class="form-control form-control-dark" id="ciudad" oninput="onlyLetters(this)">
-              <div class="error-msg">Este campo es obligatorio</div>
+              <input type="text" class="form-control form-control-dark" oninput="onlyLetters(this)">
+              <div class="error-msg">Requerido</div>
             </div>
           </div>
 
           <div class="summary-card mt-4 mb-3 d-lg-none py-3">
-             <div class="d-flex justify-content-between text-secondary small mb-1">
-               <span>Unitario</span><span class="summ-unit">$0</span>
-             </div>
-             <div class="d-flex justify-content-between border-top border-secondary pt-2">
-               <span class="text-white">Total</span><span class="fw-bold text-warning summ-total">$0</span>
-             </div>
+             <div class="d-flex justify-content-between text-secondary small mb-1"><span>Unitario</span><span class="summ-unit">$0</span></div>
+             <div class="d-flex justify-content-between border-top border-secondary pt-2"><span class="text-white">Total</span><span class="fw-bold text-warning summ-total">$0</span></div>
           </div>
 
-          <div class="mt-3 text-end">
-            <button class="btn btn-checkout w-100 w-md-auto" onclick="goStep(2)">Siguiente</button>
-          </div>
+          <div class="mt-3 text-end"><button class="btn btn-checkout" onclick="goStep(2)">Siguiente</button></div>
         </div>
 
         <div id="step2" class="form-section form-card compact">
           <h5 class="mb-3 border-bottom border-secondary pb-2 text-white">Pago Seguro</h5>
-          
-          <div class="row g-3">
-            <div class="col-12">
-              <label class="form-label">Número de Tarjeta</label>
-              <input type="text" class="form-control form-control-dark" id="tarjeta" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCard(this)">
-              <div class="error-msg">Número inválido</div>
-            </div>
+          <div class="mb-2">
+            <label class="form-label">Número de Tarjeta</label>
+            <input type="text" class="form-control form-control-dark" id="tarjeta" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCard(this)">
+            <div class="error-msg">Número inválido</div>
+          </div>
+          <div class="row g-2">
             <div class="col-12 col-md-6">
               <label class="form-label">Titular</label>
-              <input type="text" class="form-control form-control-dark" id="titular" oninput="onlyLetters(this)">
-              <div class="error-msg">Nombre como figura en la tarjeta</div>
+              <input type="text" class="form-control form-control-dark" oninput="onlyLetters(this)">
+              <div class="error-msg">Requerido</div>
             </div>
             <div class="col-12 col-md-3">
-              <label class="form-label">Vencimiento</label>
+              <label class="form-label">Venc.</label>
               <input type="text" class="form-control form-control-dark" id="venc" placeholder="MM/AA" maxlength="5" oninput="smartDate(this)">
-              <div class="error-msg">Incompleto</div>
+              <div class="error-msg">MM/AA</div>
             </div>
             <div class="col-12 col-md-3">
               <label class="form-label">CVV</label>
               <input type="text" class="form-control form-control-dark" id="cvv" placeholder="123" maxlength="3" oninput="onlyNumbers(this)">
-              <div class="error-msg">3 dígitos</div>
+              <div class="error-msg">3 núm</div>
             </div>
           </div>
 
           <div class="summary-card mt-4 mb-3 d-lg-none py-3">
-             <div class="d-flex justify-content-between border-top border-secondary pt-2">
-               <span class="text-white">Total a Pagar</span><span class="fw-bold text-warning summ-total">$0</span>
-             </div>
+             <div class="d-flex justify-content-between border-top border-secondary pt-2"><span class="text-white">Total a Pagar</span><span class="fw-bold text-warning summ-total">$0</span></div>
           </div>
 
-          <div class="mt-4 d-flex justify-content-between align-items-center gap-3">
+          <div class="mt-4 d-flex justify-content-between align-items-center">
             <button class="btn btn-outline-secondary rounded-pill btn-sm px-4" onclick="goStep(1)">Atrás</button>
-            <button class="btn btn-checkout flex-grow-1 flex-md-grow-0" onclick="finish()">Confirmar Compra</button>
+            <button class="btn btn-checkout" onclick="goStep(3)">Confirmar</button>
           </div>
         </div>
 
@@ -143,10 +118,7 @@
           <h5 class="text-warning border-bottom border-secondary pb-3 mb-3">Resumen</h5>
           <div class="d-flex align-items-center mb-4">
             <img id="prod-img" src="" style="width: 70px; height: 70px; border-radius: 8px; object-fit: cover; border: 1px solid #333;" class="me-3">
-            <div>
-              <h6 class="fw-bold mb-1 text-white summ-title">...</h6>
-              <span class="badge bg-secondary">Stock Disponible</span>
-            </div>
+            <div><h6 class="fw-bold mb-1 text-white summ-title">...</h6><span class="badge bg-secondary">Stock Disponible</span></div>
           </div>
           <div class="d-flex justify-content-between text-secondary small mb-2"><span>Unitario</span><span class="summ-unit">$0</span></div>
           <div class="d-flex justify-content-between text-secondary small mb-2"><span>Cantidad</span><span id="display-qty">1</span></div>
@@ -169,10 +141,8 @@
 
   <script>
     let unitPrice = 0;
-
-    // --- FUNCIONES DE VALIDACIÓN Y FORMATO ---
-
-    // Mostrar error debajo del input
+    
+    // --- VALIDACIONES ---
     function showError(input, msg) {
       const errorDiv = input.nextElementSibling;
       if (errorDiv && errorDiv.classList.contains('error-msg')) {
@@ -182,26 +152,22 @@
       input.classList.add('error');
     }
 
-    // Limpiar error
     function clearError(input) {
       const errorDiv = input.nextElementSibling;
       if (errorDiv) errorDiv.classList.remove('visible');
       input.classList.remove('error');
     }
 
-    // Solo Números (para CP, Tarjeta, CVV)
     function onlyNumbers(input) {
       input.value = input.value.replace(/[^0-9]/g, '');
       clearError(input);
     }
 
-    // Solo Letras (para Nombre, Apellido, Ciudad)
     function onlyLetters(input) {
       input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
       clearError(input);
     }
 
-    // Formato Tarjeta (xxxx xxxx xxxx xxxx)
     function formatCard(input) {
       let val = input.value.replace(/\D/g, '');
       val = val.replace(/(\d{4})/g, '$1 ').trim();
@@ -209,74 +175,60 @@
       clearError(input);
     }
 
-    // Formato Fecha Inteligente (MM/AA)
+    // Funcionalidad mejorada 02, 03...
     function smartDate(input) {
-      let val = input.value.replace(/\D/g, ''); // Solo números
-      
-      // Si el primer digito es 2-9, asume que es un mes de un solo digito y agrega 0 adelante
+      let val = input.value.replace(/\D/g, ''); 
       if (val.length === 1 && parseInt(val) > 1) {
           val = '0' + val;
       }
-
-      // Agregar barra automaticamente
       if (val.length >= 2) {
         val = val.substring(0, 2) + '/' + val.substring(2, 4);
       }
-      
       input.value = val;
       clearError(input);
     }
 
-    // Validador Maestro del Paso Actual
     function validateStep(stepId) {
       let isValid = true;
       const inputs = document.getElementById(stepId).querySelectorAll('input');
       
       inputs.forEach(input => {
-        // 1. Chequear vacios
         if (input.value.trim() === '') {
           showError(input, 'Requerido');
           isValid = false;
         } else {
-          // 2. Chequeos especificos por ID
-          
-          // Tarjeta:
           if (input.id === 'tarjeta' && input.value.length < 19) {
-            showError(input, 'Incompleto');
+            showError(input, 'Por favor verifique los datos ingresados');
             isValid = false;
-          }
-          // CVV: exactamente 3 numeros
-          else if (input.id === 'cvv' && input.value.length < 3) {
-            showError(input, 'Revisar informacion brindada');
+          } else if (input.id === 'cvv' && input.value.length < 3) {
+            showError(input, 'Verifique los datos ingresados');
             isValid = false;
-          }
-          // Fecha: Validacion Logica
+          } 
+          // VALIDACION DE VENCIMIENTO MEJORADA
           else if (input.id === 'venc') {
              if (input.value.length < 5) {
-                showError(input, 'Formato MM/AA');
+                showError(input, 'MM/AA');
                 isValid = false;
              } else {
                 const parts = input.value.split('/');
                 const mm = parseInt(parts[0]);
-                const aa = parseInt(parts[1]);
+                const aa = parseInt(parts[1]) + 2000;
+                
+                const now = new Date();
+                const currentYear = now.getFullYear();
+                const currentMonth = now.getMonth() + 1;
 
                 if (mm < 1 || mm > 12) {
-                   showError(input, 'Mes inválido (01-12)');
+                   showError(input, 'Mes inválido');
                    isValid = false;
-                } else if (aa < 25) {
-                   showError(input, 'Tarjeta vencida');
+                } else if (aa < currentYear || (aa === currentYear && mm < currentMonth)) {
+                   showError(input, 'Verifique la fecha ingresada');
                    isValid = false;
                 } else {
                    clearError(input);
                 }
              }
-          } 
-          // CP: Minimo 4 numeros
-          else if (input.id === 'cp' && input.value.length < 4) {
-             showError(input, 'Codigo Postal inválido');
-             isValid = false;
-          }
-          else {
+          } else {
             clearError(input);
           }
         }
@@ -284,7 +236,7 @@
       return isValid;
     }
 
-    // --- LOGICA DE CARGA Y PASOS ---
+    // --- CARGA Y TOTALES ---
     document.addEventListener("DOMContentLoaded", function() {
       const p = new URLSearchParams(window.location.search);
       const title = p.get('prod') || "Producto";
@@ -315,16 +267,11 @@
          if (!validateStep(currentStepId)) return;
       }
 
-      // Cambio visual de paso
       document.querySelectorAll('.form-section').forEach(e => e.classList.remove('active'));
       document.getElementById('step'+targetStep).classList.add('active');
-      
-      // Actualizar bolitas de indicador
       document.querySelectorAll('.step').forEach(e => e.classList.remove('active'));
       if(targetStep<=2) document.getElementById('s'+targetStep).classList.add('active');
-      
       if(targetStep==3) { 
-         // Validar paso 2 antes de ir a pantalla final
          if (!validateStep('step2')) {
             document.getElementById('step2').classList.add('active');
             document.getElementById('step3').classList.remove('active');
@@ -338,9 +285,9 @@
       if(targetStep==2) document.getElementById('s1').classList.add('completed');
     }
 
-    // Alias para el boton confirmar
-    function finish() {
-       goStep(3);
+    function finish() { 
+      if (!validateStep('step3')) return;
+      goStep(4); 
     }
   </script>
 </body>
