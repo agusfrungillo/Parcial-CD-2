@@ -64,12 +64,12 @@
             <div class="col-12 col-md-6">
               <label class="form-label">Nombre</label>
               <input type="text" class="form-control form-control-dark" id="nombre" oninput="onlyLetters(this)">
-              <div class="error-msg">Este campo es obligatorio</div>
+              <div class="error-msg">Requerido</div>
             </div>
             <div class="col-12 col-md-6">
               <label class="form-label">Apellido</label>
               <input type="text" class="form-control form-control-dark" id="apellido" oninput="onlyLetters(this)">
-              <div class="error-msg">Este campo es obligatorio</div>
+              <div class="error-msg">Requerido</div>
             </div>
             <div class="col-12">
               <label class="form-label">Email</label>
@@ -93,17 +93,17 @@
           <div class="mb-3">
             <label class="form-label">Tarjeta</label>
             <input type="text" class="form-control form-control-dark" id="tarjeta" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCard(this)">
-            <div class="error-msg">Número de tarjeta inválido</div>
+            <div class="error-msg">Número inválido</div>
           </div>
           <div class="row g-3">
             <div class="col-12 col-md-6">
               <label class="form-label">Titular</label>
               <input type="text" class="form-control form-control-dark" id="titular" oninput="onlyLetters(this)">
-              <div class="error-msg">Campo obligatorio</div>
+              <div class="error-msg">Como figura en la tarjeta</div>
             </div>
             <div class="col-12 col-md-3">
               <label class="form-label">Venc.</label>
-              <input type="text" class="form-control form-control-dark" id="venc" placeholder="MM/AA" maxlength="5" oninput="formatDate(this)">
+              <input type="text" class="form-control form-control-dark" id="venc" placeholder="MM/AA" maxlength="5" oninput="smartDate(this)">
               <div class="error-msg">Incompleto</div>
             </div>
             <div class="col-12 col-md-3">
@@ -173,19 +173,16 @@
       input.classList.remove('error');
     }
 
-    // Solo numeros
     function onlyNumbers(input) {
       input.value = input.value.replace(/[^0-9]/g, '');
       clearError(input);
     }
 
-    // Solo letras
     function onlyLetters(input) {
       input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
       clearError(input);
     }
 
-    // Formato Tarjeta (espacios cada 4)
     function formatCard(input) {
       let val = input.value.replace(/\D/g, '');
       val = val.replace(/(\d{4})/g, '$1 ').trim();
@@ -193,45 +190,71 @@
       clearError(input);
     }
 
-    // Formato Fecha MM/AA
-    function formatDate(input) {
+    function smartDate(input) {
       let val = input.value.replace(/\D/g, '');
+      
+      if (val.length === 1 && parseInt(val) > 1) {
+          val = '0' + val;
+      }
+
       if (val.length >= 2) {
         val = val.substring(0, 2) + '/' + val.substring(2, 4);
       }
+      
       input.value = val;
       clearError(input);
     }
 
-    // VALIDACION PRINCIPAL DEL PASO
     function validateStep(stepId) {
       let isValid = true;
       const inputs = document.getElementById(stepId).querySelectorAll('input');
       
       inputs.forEach(input => {
-        if (input.type === 'radio') return; // Ignorar radios
+        if (input.type === 'radio') return;
 
-        // Chequeo vacio
         if (input.value.trim() === '') {
           showError(input, 'Este campo es obligatorio');
           isValid = false;
         } else {
-          // Chequeos especificos
           if (input.id === 'email' && !input.value.includes('@')) {
-            showError(input, 'Por favor ingresar un correo valido');
+            showError(input, 'Ingresá un email válido');
             isValid = false;
           }
           else if (input.id === 'tarjeta' && input.value.length < 19) {
-            showError(input, 'Incompleto');
+            showError(input, 'Por favor verifique los datos ingresados');
             isValid = false;
           }
           else if (input.id === 'cvv' && input.value.length < 3) {
-            showError(input, 'Revisar informacion brindada');
+            showError(input, 'Verifique los datos ingresados');
             isValid = false;
           }
-          else if (input.id === 'venc' && input.value.length < 5) {
-            showError(input, 'Formato MM/AA');
-            isValid = false;
+          // VALIDACIÓN DE FECHA
+          else if (input.id === 'venc') {
+             if (input.value.length < 5) {
+                showError(input, 'Formato MM/AA');
+                isValid = false;
+             } else {
+                const parts = input.value.split('/');
+                const mm = parseInt(parts[0]);
+                const aa = parseInt(parts[1]) + 2000;
+                
+                const now = new Date();
+                const currentYear = now.getFullYear();
+                const currentMonth = now.getMonth() + 1; // Enero es 0
+
+                if (mm < 1 || mm > 12) {
+                   showError(input, 'Mes inválido');
+                   isValid = false;
+                } else {
+                   // Validar si la fecha ya pasó
+                   if (aa < currentYear || (aa === currentYear && mm < currentMonth)) {
+                      showError(input, 'Verifique la fecha ingresada');
+                      isValid = false;
+                   } else {
+                      clearError(input);
+                   }
+                }
+             }
           } else {
             clearError(input);
           }
@@ -240,7 +263,6 @@
       return isValid;
     }
 
-    // --- LOGICA DE PASOS ---
     function selectTicket(p, n) { 
       price = p; name = n; 
       document.querySelectorAll('.ticket-option').forEach(e => e.classList.remove('selected'));
@@ -256,24 +278,20 @@
     }
 
     function goStep(targetStep) {
-      // Identificar paso actual para validar antes de avanzar
       let currentStepNum = targetStep - 1;
       let currentStepId = 'step' + currentStepNum;
 
-      // Si vamos para adelante (target > current), validamos
-      // Nota: Si targetStep es 4 (final), validamos el 3.
       if (targetStep > 1 && targetStep <= 4) {
-         // Si voy del 1 al 2, no hay inputs que validar (solo radio y select que siempre tienen valor)
-         if (currentStepNum > 1) { 
-            if (!validateStep(currentStepId)) return; // Bloquear si falla
+         // Validamos el paso anterior si estamos avanzando
+         if (currentStepNum >= 1 && currentStepNum <= 3) { 
+            // Saltea validacion si paso 1 es solo seleccion (radio)
+         if (currentStepNum > 1 && !validateStep(currentStepId)) return;
          }
       }
 
-      // Cambio de vista
       document.querySelectorAll('.form-section').forEach(e => e.classList.remove('active'));
       document.getElementById('step'+targetStep).classList.add('active');
       
-      // Indicadores
       document.querySelectorAll('.step').forEach(e => e.classList.remove('active'));
       if(targetStep<=3) document.getElementById('s'+targetStep).classList.add('active');
       
