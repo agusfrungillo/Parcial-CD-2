@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Finalizar Compra</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Finalizar Compra</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
@@ -29,35 +29,36 @@
         </div>
 
         <div id="step1" class="form-section active form-card compact">
-          <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary">
+          <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary">
              <div><p class="text-warning fw-bold m-0 text-uppercase summ-title">Producto</p><span class="badge bg-secondary" style="font-size: 0.65rem;">Stock Disponible</span></div>
              <div class="d-flex align-items-center"><label class="text-white small me-2">Cant:</label><select class="form-control form-control-dark py-1 px-2 text-center" style="width: 60px;" id="cantidad" onchange="updateTotal()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></div>
           </div>
+
           <h5 class="text-white">Dirección de Entrega</h5>
-          <div class="row g-2">
-            <div class="col-12 col-md-6">
+          <div class="row g-3">
+            <div class="col-12 col-lg-6">
               <label class="form-label">Nombre</label>
-              <input type="text" class="form-control form-control-dark" oninput="onlyLetters(this)">
+              <input type="text" class="form-control form-control-dark" id="nombre" oninput="onlyLetters(this)">
               <div class="error-msg">Requerido</div>
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-lg-6">
               <label class="form-label">Apellido</label>
-              <input type="text" class="form-control form-control-dark" oninput="onlyLetters(this)">
+              <input type="text" class="form-control form-control-dark" id="apellido" oninput="onlyLetters(this)">
               <div class="error-msg">Requerido</div>
             </div>
             <div class="col-12">
               <label class="form-label">Dirección</label>
-              <input type="text" class="form-control form-control-dark" placeholder="Calle y altura">
+              <input type="text" class="form-control form-control-dark" placeholder="Calle y altura" id="direccion">
               <div class="error-msg">Ingresa una dirección</div>
             </div>
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-lg-4">
               <label class="form-label">CP</label>
               <input type="text" class="form-control form-control-dark" placeholder="0000" id="cp" maxlength="4" oninput="onlyNumbers(this)">
               <div class="error-msg">Requerido</div>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-lg-8">
               <label class="form-label">Ciudad</label>
-              <input type="text" class="form-control form-control-dark" oninput="onlyLetters(this)">
+              <input type="text" class="form-control form-control-dark" id="ciudad" oninput="onlyLetters(this)">
               <div class="error-msg">Requerido</div>
             </div>
           </div>
@@ -67,28 +68,29 @@
              <div class="d-flex justify-content-between border-top border-secondary pt-2"><span class="text-white">Total</span><span class="fw-bold text-warning summ-total">$0</span></div>
           </div>
 
-          <div class="mt-3 text-end"><button class="btn btn-checkout" onclick="goStep(2)">Siguiente</button></div>
+          <div class="mt-3 text-end"><button class="btn btn-checkout w-100 w-md-auto" onclick="goStep(2)">Siguiente</button></div>
         </div>
 
         <div id="step2" class="form-section form-card compact">
           <h5 class="mb-3 border-bottom border-secondary pb-2 text-white">Pago Seguro</h5>
-          <div class="mb-2">
+          <div class="mb-3">
             <label class="form-label">Número de Tarjeta</label>
             <input type="text" class="form-control form-control-dark" id="tarjeta" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCard(this)">
             <div class="error-msg">Número inválido</div>
           </div>
-          <div class="row g-2">
-            <div class="col-12 col-md-6">
+          
+          <div class="row g-3">
+            <div class="col-12 col-lg-6">
               <label class="form-label">Titular</label>
-              <input type="text" class="form-control form-control-dark" oninput="onlyLetters(this)">
+              <input type="text" class="form-control form-control-dark" id="titular" oninput="onlyLetters(this)">
               <div class="error-msg">Requerido</div>
             </div>
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-lg-3">
               <label class="form-label">Venc.</label>
               <input type="text" class="form-control form-control-dark" id="venc" placeholder="MM/AA" maxlength="5" oninput="smartDate(this)">
               <div class="error-msg">MM/AA</div>
             </div>
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-lg-3">
               <label class="form-label">CVV</label>
               <input type="text" class="form-control form-control-dark" id="cvv" placeholder="123" maxlength="3" oninput="onlyNumbers(this)">
               <div class="error-msg">3 núm</div>
@@ -142,7 +144,6 @@
   <script>
     let unitPrice = 0;
     
-    // --- VALIDACIONES ---
     function showError(input, msg) {
       const errorDiv = input.nextElementSibling;
       if (errorDiv && errorDiv.classList.contains('error-msg')) {
@@ -175,7 +176,7 @@
       clearError(input);
     }
 
-    // Funcionalidad mejorada 02, 03...
+    // Funcionalidad mejorada 02, 03... y barra
     function smartDate(input) {
       let val = input.value.replace(/\D/g, ''); 
       if (val.length === 1 && parseInt(val) > 1) {
@@ -194,7 +195,7 @@
       
       inputs.forEach(input => {
         if (input.value.trim() === '') {
-          showError(input, 'Requerido');
+          showError(input, 'Este campo es obligatorio');
           isValid = false;
         } else {
           if (input.id === 'tarjeta' && input.value.length < 19) {
@@ -204,7 +205,7 @@
             showError(input, 'Verifique los datos ingresados');
             isValid = false;
           } 
-          // VALIDACION DE VENCIMIENTO MEJORADA
+          // VALIDACION FECHA REAL
           else if (input.id === 'venc') {
              if (input.value.length < 5) {
                 showError(input, 'MM/AA');
@@ -213,7 +214,6 @@
                 const parts = input.value.split('/');
                 const mm = parseInt(parts[0]);
                 const aa = parseInt(parts[1]) + 2000;
-                
                 const now = new Date();
                 const currentYear = now.getFullYear();
                 const currentMonth = now.getMonth() + 1;
@@ -222,7 +222,7 @@
                    showError(input, 'Mes inválido');
                    isValid = false;
                 } else if (aa < currentYear || (aa === currentYear && mm < currentMonth)) {
-                   showError(input, 'Verifique la fecha ingresada');
+                   showError(input, 'Ingrese una fecha valida');
                    isValid = false;
                 } else {
                    clearError(input);
@@ -236,7 +236,6 @@
       return isValid;
     }
 
-    // --- CARGA Y TOTALES ---
     document.addEventListener("DOMContentLoaded", function() {
       const p = new URLSearchParams(window.location.search);
       const title = p.get('prod') || "Producto";
