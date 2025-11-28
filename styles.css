@@ -321,7 +321,7 @@ ul.nav-links a:hover {
   object-fit: cover;
 }
 
-/* --- ESTILOS COMPARTIDOS (FAQ/Contacto/ComoLlegar) --- */
+/* --- ESTILOS COMPARTIDOS --- */
 .page-header {
   background: linear-gradient(#0d0d31, #000);
   color: #fff;
@@ -335,7 +335,6 @@ ul.nav-links a:hover {
   margin: 0;
 }
 
-/* FIX DESKTOP: Distribución 50/50 */
 .indicaciones,
 .transporte-mapa,
 .contacto {
@@ -351,11 +350,9 @@ ul.nav-links a:hover {
   flex: 1;
 }
 
-/* FIX DESKTOP: Imagen full ancho de su columna */
 .indicaciones-imagen img {
   width: 100%;
   max-width: 100%;
-  /* Eliminado el limite de 500px */
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
@@ -385,7 +382,6 @@ ul.nav-links a:hover {
 .faq {
   padding: 60px 10%;
   text-align: center;
-  /* Centrado titulo */
 }
 
 .faq h2 {
@@ -435,10 +431,8 @@ ul.nav-links a:hover {
 
 /* CONTACTO DEGRADE */
 .contacto {
-  background-image: url(img/patron.jpg);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: linear-gradient(to bottom, #000000 0%, #d8a650 100%); 
+  color: #fff;
   border-top: 1px solid #222;
 }
 
@@ -568,10 +562,12 @@ ul.nav-links a:hover {
   align-items: center;
   transition: 0.3s;
 }
-.ticket-option div { 
-  text-align: left; 
-  margin-left: 15px; 
-  margin-right: auto; 
+
+/* Alineación de texto a la izquierda en Desktop */
+.ticket-option div {
+  text-align: left;
+  margin-left: 15px;
+  margin-right: auto;
 }
 
 .ticket-option:hover,
@@ -599,6 +595,25 @@ ul.nav-links a:hover {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* VALIDACIONES */
+.form-control-dark.error {
+  border-color: #ff4444 !important;
+  background-color: rgba(255, 68, 68, 0.05) !important;
+}
+
+.error-msg {
+  color: #ff4444;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  font-weight: 500;
+  display: none;
+  text-align: left;
+}
+
+.error-msg.visible {
+  display: block;
 }
 
 /* --- FOOTER --- */
@@ -920,7 +935,7 @@ footer {
     height: 30px;
   }
 
-  /* RESET para secciones secundarias en movil (Anula el flex:1 de desktop) */
+  /* RESET*/
   .indicaciones,
   .transporte-mapa,
   .contacto {
@@ -970,6 +985,7 @@ footer {
     gap: 10px;
   }
 
+  /* Reset centrado en mobile */
   .ticket-option div {
     text-align: center; 
     margin: 0; 
